@@ -50,7 +50,18 @@ test("parse class", () => {
       ],
       constructors: [
         {
-          parameters: [],
+          parameters: [
+            {
+              name: "brand",
+              documentation: "",
+              type: "string",
+            },
+            {
+              name: "regNum",
+              documentation: "",
+              type: "string",
+            },
+          ],
           documentation: "",
           returnType: "Car",
         },
@@ -111,7 +122,18 @@ test("print class", () => {
       ],
       constructors: [
         {
-          parameters: [],
+          parameters: [
+            {
+              name: "brand",
+              documentation: "",
+              type: "string",
+            },
+            {
+              name: "regNum",
+              documentation: "",
+              type: "string",
+            },
+          ],
           documentation: "",
           returnType: "Car",
         },

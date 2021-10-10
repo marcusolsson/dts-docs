@@ -31,7 +31,7 @@ export const printClass = (c: ClassDocEntry): string => {
       res.push(
         `constructor(${constructor.parameters
           .map((p) => `${p.name}: ${p.type}`)
-          .join(",")});`
+          .join(", ")});`
       );
     });
     res.push("```");

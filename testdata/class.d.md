@@ -15,7 +15,7 @@ Implements `Runnable`, `Object`
 ## Constructor
 
 ```ts
-constructor();
+constructor(brand: string, regNum: string);
 ```
 
 ## Properties

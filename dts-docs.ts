@@ -75,8 +75,23 @@ const outDir = argv.output;
 
 const res: string[] = [];
 
+res.push("---");
+res.push("slug: /api");
+res.push("sidebar_label: Overview");
+res.push("---");
+res.push("");
+
 res.push("# API reference");
 res.push("");
+res.push(":::warning");
+res.push(
+  "This documentation has been generated from the [Obsidian API](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts)."
+);
+res.push("");
+res.push(
+  "The [script](https://github.com/marcusolsson/dts-docs) used to generate the documentation is still relatively untested. If you spot any errors or inconsistencies with the official API, let me know."
+);
+res.push(":::");
 
 res.push("## Classes");
 res.push("");
@@ -87,6 +102,7 @@ classes.forEach((c) => {
   res.push(`- [${c.name}](classes/${c.name}.md)`);
 });
 
+res.push("");
 res.push("## Enums");
 res.push("");
 
@@ -96,6 +112,7 @@ enums.forEach((e) => {
   res.push(`- [${e.name}](enums/${e.name}.md)`);
 });
 
+res.push("");
 res.push("## Functions");
 res.push("");
 
@@ -108,6 +125,7 @@ functions.forEach((f) => {
   res.push(`- [${f.name}](functions/${f.name}.md)`);
 });
 
+res.push("");
 res.push("## Interfaces");
 res.push("");
 
@@ -120,6 +138,7 @@ interfaces.forEach((i) => {
   res.push(`- [${i.name}](interfaces/${i.name}.md)`);
 });
 
+res.push("");
 res.push("## Types");
 res.push("");
 
@@ -128,5 +147,7 @@ types.forEach((t) => {
 
   res.push(`- [${t.name}](types/${t.name}.md)`);
 });
+
+res.push("");
 
 writeFileSync(path.join(outDir, "overview.md"), res.join("\n"));
