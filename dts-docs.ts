@@ -1,8 +1,5 @@
 import { writeFileSync } from "fs";
-import * as path from "path/posix";
 import * as ts from "typescript";
-import * as yargs from "yargs";
-import { hideBin } from "yargs/helpers";
 import { parseClass, printClass } from "./class";
 import { parseEnum, printEnum } from "./enum";
 import { parseFunction, printFunction } from "./function";
@@ -15,8 +12,9 @@ import {
   InterfaceDocEntry,
   TypeDocEntry,
 } from "./types";
+import * as path from "path";
 
-const parseFile = (file: string) => {
+function parseFile(file: string) {
   const program = ts.createProgram([file], {});
   const checker = program.getTypeChecker();
   const printer = ts.createPrinter({
@@ -52,102 +50,91 @@ const parseFile = (file: string) => {
     enums,
     types,
   };
-};
+}
 
-const argv = yargs(hideBin(process.argv))
-  .usage("Usage: $0 --input [FILE] --output [DIR]")
-  .demandOption(["input", "output"])
-  .option("input", {
-    alias: "i",
-    type: "string",
-    description: "Path to a .d.ts file.",
-  })
-  .option("output", {
-    alias: "o",
-    type: "string",
-    description: "Path to the directory where the docs will go.",
-  })
-  .parseSync();
+function main(args: string[]): void {
+  const { types, enums, functions, interfaces, classes } = parseFile(args[0]);
 
-const { types, enums, functions, interfaces, classes } = parseFile(argv.input);
+  const outDir = args[1];
 
-const outDir = argv.output;
+  const res: string[] = [];
 
-const res: string[] = [];
+  res.push("---");
+  res.push("slug: /api");
+  res.push("sidebar_label: Overview");
+  res.push("---");
+  res.push("");
 
-res.push("---");
-res.push("slug: /api");
-res.push("sidebar_label: Overview");
-res.push("---");
-res.push("");
-
-res.push("# API reference");
-res.push("");
-res.push(":::warning");
-res.push(
-  "This documentation has been generated from the [Obsidian API](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts)."
-);
-res.push("");
-res.push(
-  "The [script](https://github.com/marcusolsson/dts-docs) used to generate the documentation is still relatively untested. If you spot any errors or inconsistencies with the official API, let me know."
-);
-res.push(":::");
-
-res.push("## Classes");
-res.push("");
-
-classes.forEach((c) => {
-  writeFileSync(path.join(outDir, "classes", c.name + ".md"), printClass(c));
-
-  res.push(`- [${c.name}](classes/${c.name}.md)`);
-});
-
-res.push("");
-res.push("## Enums");
-res.push("");
-
-enums.forEach((e) => {
-  writeFileSync(path.join(outDir, "enums", e.name + ".md"), printEnum(e));
-
-  res.push(`- [${e.name}](enums/${e.name}.md)`);
-});
-
-res.push("");
-res.push("## Functions");
-res.push("");
-
-functions.forEach((f) => {
-  writeFileSync(
-    path.join(outDir, "functions", f.name + ".md"),
-    printFunction(f)
+  res.push("# API reference");
+  res.push("");
+  res.push(":::warning");
+  res.push(
+    "This documentation has been generated from the [Obsidian API](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts)."
   );
-
-  res.push(`- [${f.name}](functions/${f.name}.md)`);
-});
-
-res.push("");
-res.push("## Interfaces");
-res.push("");
-
-interfaces.forEach((i) => {
-  writeFileSync(
-    path.join(outDir, "interfaces", i.name + ".md"),
-    printInterface(i)
+  res.push("");
+  res.push(
+    "The [script](https://github.com/marcusolsson/dts-docs) used to generate the documentation is still relatively untested. If you spot any errors or inconsistencies with the official API, let me know."
   );
+  res.push(":::");
 
-  res.push(`- [${i.name}](interfaces/${i.name}.md)`);
-});
+  res.push("## Classes");
+  res.push("");
 
-res.push("");
-res.push("## Types");
-res.push("");
+  classes.forEach((c) => {
+    writeFileSync(path.join(outDir, "classes", c.name + ".md"), printClass(c));
 
-types.forEach((t) => {
-  writeFileSync(path.join(outDir, "types", t.name + ".md"), printType(t));
+    res.push(`- [${c.name}](classes/${c.name}.md)`);
+  });
 
-  res.push(`- [${t.name}](types/${t.name}.md)`);
-});
+  res.push("");
+  res.push("## Enums");
+  res.push("");
 
-res.push("");
+  enums.forEach((e) => {
+    writeFileSync(path.join(outDir, "enums", e.name + ".md"), printEnum(e));
 
-writeFileSync(path.join(outDir, "overview.md"), res.join("\n"));
+    res.push(`- [${e.name}](enums/${e.name}.md)`);
+  });
+
+  res.push("");
+  res.push("## Functions");
+  res.push("");
+
+  functions.forEach((f) => {
+    writeFileSync(
+      path.join(outDir, "functions", f.name + ".md"),
+      printFunction(f)
+    );
+
+    res.push(`- [${f.name}](functions/${f.name}.md)`);
+  });
+
+  res.push("");
+  res.push("## Interfaces");
+  res.push("");
+
+  interfaces.forEach((i) => {
+    writeFileSync(
+      path.join(outDir, "interfaces", i.name + ".md"),
+      printInterface(i)
+    );
+
+    res.push(`- [${i.name}](interfaces/${i.name}.md)`);
+  });
+
+  res.push("");
+  res.push("## Types");
+  res.push("");
+
+  types.forEach((t) => {
+    writeFileSync(path.join(outDir, "types", t.name + ".md"), printType(t));
+
+    res.push(`- [${t.name}](types/${t.name}.md)`);
+  });
+
+  res.push("");
+
+  writeFileSync(path.join(outDir, "overview.md"), res.join("\n"));
+}
+
+main(process.argv.slice(2));
