@@ -59,23 +59,8 @@ function main(args: string[]): void {
 
   const res: string[] = [];
 
-  res.push("---");
-  res.push("slug: /api");
-  res.push("sidebar_label: Overview");
-  res.push("---");
-  res.push("");
-
   res.push("# API reference");
   res.push("");
-  res.push(":::warning");
-  res.push(
-    "This documentation has been generated from the [Obsidian API](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts)."
-  );
-  res.push("");
-  res.push(
-    "The [script](https://github.com/marcusolsson/dts-docs) used to generate the documentation is still relatively untested. If you spot any errors or inconsistencies with the official API, let me know."
-  );
-  res.push(":::");
 
   res.push("## Classes");
   res.push("");
