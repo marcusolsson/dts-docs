@@ -29,19 +29,37 @@ function parseFile(file: string) {
   const enums: EnumDocEntry[] = [];
   const types: TypeDocEntry[] = [];
 
-  ts.forEachChild(sourceFile, (node) => {
-    if (ts.isFunctionDeclaration(node)) {
-      functions.push(parseFunction(node, checker, printer, sourceFile));
-    } else if (ts.isInterfaceDeclaration(node)) {
-      interfaces.push(parseInterface(node, checker, printer, sourceFile));
-    } else if (ts.isClassDeclaration(node)) {
-      classes.push(parseClass(node, checker, printer, sourceFile));
-    } else if (ts.isEnumDeclaration(node)) {
-      enums.push(parseEnum(node, checker, printer, sourceFile));
-    } else if (ts.isTypeAliasDeclaration(node)) {
-      types.push(parseType(node, checker, printer, sourceFile));
-    }
-  });
+  if (!sourceFile) {
+    return {
+      functions,
+      interfaces,
+      classes,
+      enums,
+      types,
+    };
+  }
+
+  const parseDeclarations = (node: ts.Node) => {
+    ts.forEachChild(node, (n) => {
+      if (ts.isFunctionDeclaration(n)) {
+        functions.push(parseFunction(n, checker, printer, sourceFile));
+      } else if (ts.isInterfaceDeclaration(n)) {
+        interfaces.push(parseInterface(n, checker, printer, sourceFile));
+      } else if (ts.isClassDeclaration(n)) {
+        classes.push(parseClass(n, checker, printer, sourceFile));
+      } else if (ts.isEnumDeclaration(n)) {
+        enums.push(parseEnum(n, checker, printer, sourceFile));
+      } else if (ts.isTypeAliasDeclaration(n)) {
+        types.push(parseType(n, checker, printer, sourceFile));
+      } else if (ts.isModuleDeclaration(n)) {
+        if (n.body) {
+          parseDeclarations(n.body);
+        }
+      }
+    });
+  };
+
+  parseDeclarations(sourceFile);
 
   return {
     functions,
@@ -119,7 +137,7 @@ function main(args: string[]): void {
 
   res.push("");
 
-  writeFileSync(path.join(outDir, "overview.md"), res.join("\n"));
+  writeFileSync(path.join(outDir, "index.md"), res.join("\n"));
 }
 
 main(process.argv.slice(2));
