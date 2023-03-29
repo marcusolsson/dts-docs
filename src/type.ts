@@ -7,10 +7,14 @@ export const printType = (e: TypeDocEntry): string => {
 
   res.push(`# ${e.name}`);
   res.push("");
-  res.push("```ts");
-  res.push(e.raw);
-  res.push("```");
-  res.push("");
+
+  if (e.raw) {
+    res.push("```ts");
+    res.push(e.raw);
+    res.push("```");
+    res.push("");
+  }
+
   res.push(escapeHTML(e.documentation));
   res.push("");
 
@@ -24,6 +28,11 @@ export const parseType = (
   sourceFile: ts.SourceFile
 ): EnumDocEntry => {
   const symbol = checker.getSymbolAtLocation(node.name);
+
+  if (!symbol) {
+    throw new Error("unexpected error");
+  }
+
   return {
     ...serializeSymbol(checker, symbol),
     raw: printer.printNode(ts.EmitHint.Unspecified, node, sourceFile),

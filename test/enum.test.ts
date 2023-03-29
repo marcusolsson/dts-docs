@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import * as ts from "typescript";
-import { parseEnum, printEnum } from "./enum";
-import { EnumDocEntry } from "./types";
+import { parseEnum, printEnum } from "../src/enum";
+import { EnumDocEntry } from "../src/types";
 
 test("parse enum", () => {
   const file = "./testdata/enum.d.ts";
@@ -13,12 +13,17 @@ test("parse enum", () => {
     removeComments: true,
   });
 
+  expect(sourceFile).toBeTruthy();
+
   const enums: EnumDocEntry[] = [];
-  ts.forEachChild(sourceFile, (node) => {
-    if (ts.isEnumDeclaration(node)) {
-      enums.push(parseEnum(node, checker, printer, sourceFile));
-    }
-  });
+
+  if (sourceFile) {
+    ts.forEachChild(sourceFile, (node) => {
+      if (ts.isEnumDeclaration(node)) {
+        enums.push(parseEnum(node, checker, printer, sourceFile));
+      }
+    });
+  }
 
   const want = [
     {

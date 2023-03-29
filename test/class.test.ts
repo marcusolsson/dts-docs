@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import * as ts from "typescript";
-import { parseClass, printClass } from "./class";
-import { ClassDocEntry } from "./types";
+import { parseClass, printClass } from "../src/class";
+import { ClassDocEntry } from "../src/types";
 
 test("parse class", () => {
   const file = "./testdata/class.d.ts";

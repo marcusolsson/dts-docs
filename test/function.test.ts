@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
-import { FunctionDocEntry } from "types";
+import { FunctionDocEntry } from "../src/types";
 import * as ts from "typescript";
-import { parseFunction, printFunction } from "./function";
+import { parseFunction, printFunction } from "../src/function";
 
 test("parse function", () => {
   const file = "./testdata/function.d.ts";
@@ -14,11 +14,14 @@ test("parse function", () => {
   });
 
   const functions: FunctionDocEntry[] = [];
-  ts.forEachChild(sourceFile, (node) => {
-    if (ts.isFunctionDeclaration(node)) {
-      functions.push(parseFunction(node, checker, printer, sourceFile));
-    }
-  });
+
+  if (sourceFile) {
+    ts.forEachChild(sourceFile, (node) => {
+      if (ts.isFunctionDeclaration(node)) {
+        functions.push(parseFunction(node, checker, printer, sourceFile));
+      }
+    });
+  }
 
   const want = [
     {

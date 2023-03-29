@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
-import { InterfaceDocEntry } from "types";
+import { InterfaceDocEntry } from "../src/types";
 import * as ts from "typescript";
-import { parseInterface, printInterface } from "./interface";
+import { parseInterface, printInterface } from "../src/interface";
 
 test("parse interface", () => {
   const file = "./testdata/interface.d.ts";
