@@ -39,3 +39,21 @@ start(): void;
 ```ts
 stop(): void;
 ```
+
+### on
+
+```ts
+on(name: "foo", callback: () => any, ctx?: any): string;
+```
+
+### on
+
+```ts
+on(name: "bar", callback: () => any, ctx?: any): string;
+```
+
+### on
+
+```ts
+on(name: "baz", callback: () => any, ctx?: any): string;
+```
