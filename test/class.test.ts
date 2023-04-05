@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import * as ts from "typescript";
-import { parseClass, printClass } from "./class";
-import { ClassDocEntry } from "./types";
+import { parseClass, printClass } from "../src/class";
+import { ClassDocEntry } from "../src/types";
 
 test("parse class", () => {
   const file = "./testdata/class.d.ts";
@@ -78,6 +78,24 @@ test("parse class", () => {
           documentation: "",
           raw: "stop(): void;",
           type: "() => void",
+        },
+        {
+          name: "on",
+          documentation: "foo",
+          raw: `on(name: "foo", callback: () => any, ctx?: any): string;`,
+          type: '(name: "foo", callback: () => any, ctx?: any): string;',
+        },
+        {
+          name: "on",
+          documentation: "bar",
+          raw: `on(name: "bar", callback: () => any, ctx?: any): string;`,
+          type: '(name: "bar", callback: () => any, ctx?: any): string;',
+        },
+        {
+          name: "on",
+          documentation: "baz",
+          raw: `on(name: "baz", callback: () => any, ctx?: any): string;`,
+          type: '(name: "baz", callback: () => any, ctx?: any): string;',
         },
       ],
       heritage: {

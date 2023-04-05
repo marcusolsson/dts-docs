@@ -1,4 +1,4 @@
-import { writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import * as ts from "typescript";
 import { parseClass, printClass } from "./class";
 import { parseEnum, printEnum } from "./enum";
@@ -13,6 +13,12 @@ import {
   TypeDocEntry,
 } from "./types";
 import * as path from "path";
+
+function ensureDir(dirPath: string) {
+  if (!existsSync(dirPath)) {
+    mkdirSync(dirPath);
+  }
+}
 
 function parseFile(file: string) {
   const program = ts.createProgram([file], {});
@@ -75,6 +81,10 @@ function main(args: string[]): void {
 
   const outDir = args[1];
 
+  if (outDir) {
+    ensureDir(path.join(outDir));
+  }
+
   const res: string[] = [];
 
   res.push("# API reference");
@@ -82,6 +92,10 @@ function main(args: string[]): void {
 
   res.push("## Classes");
   res.push("");
+
+  if (classes.length) {
+    ensureDir(path.join(outDir, "classes"));
+  }
 
   classes.forEach((c) => {
     writeFileSync(path.join(outDir, "classes", c.name + ".md"), printClass(c));
@@ -93,6 +107,10 @@ function main(args: string[]): void {
   res.push("## Enums");
   res.push("");
 
+  if (enums.length) {
+    ensureDir(path.join(outDir, "enums"));
+  }
+
   enums.forEach((e) => {
     writeFileSync(path.join(outDir, "enums", e.name + ".md"), printEnum(e));
 
@@ -102,6 +120,10 @@ function main(args: string[]): void {
   res.push("");
   res.push("## Functions");
   res.push("");
+
+  if (functions.length) {
+    ensureDir(path.join(outDir, "functions"));
+  }
 
   functions.forEach((f) => {
     writeFileSync(
@@ -116,6 +138,10 @@ function main(args: string[]): void {
   res.push("## Interfaces");
   res.push("");
 
+  if (interfaces.length) {
+    ensureDir(path.join(outDir, "interfaces"));
+  }
+
   interfaces.forEach((i) => {
     writeFileSync(
       path.join(outDir, "interfaces", i.name + ".md"),
@@ -128,6 +154,10 @@ function main(args: string[]): void {
   res.push("");
   res.push("## Types");
   res.push("");
+
+  if (types.length) {
+    ensureDir(path.join(outDir, "types"));
+  }
 
   types.forEach((t) => {
     writeFileSync(path.join(outDir, "types", t.name + ".md"), printType(t));

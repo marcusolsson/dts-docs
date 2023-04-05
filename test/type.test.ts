@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import * as ts from "typescript";
-import { parseType, printType } from "./type";
-import { EnumDocEntry } from "./types";
+import { parseType, printType } from "../src/type";
+import { EnumDocEntry } from "../src/types";
 
 test("parse type", () => {
   const file = "./testdata/type.d.ts";
@@ -14,11 +14,14 @@ test("parse type", () => {
   });
 
   const enums: EnumDocEntry[] = [];
-  ts.forEachChild(sourceFile, (node) => {
-    if (ts.isTypeAliasDeclaration(node)) {
-      enums.push(parseType(node, checker, printer, sourceFile));
-    }
-  });
+
+  if (sourceFile) {
+    ts.forEachChild(sourceFile, (node) => {
+      if (ts.isTypeAliasDeclaration(node)) {
+        enums.push(parseType(node, checker, printer, sourceFile));
+      }
+    });
+  }
 
   const want = [
     {

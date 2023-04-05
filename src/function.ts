@@ -18,8 +18,11 @@ export const parseFunction = (
     symbol
       .getJsDocTags()
       .filter((f) => f.name === "param")
-      .map((f) => f.text.split(" - "))
-      .map((f) => [f[0], f[1]])
+      .map((f) => {
+        const name = f.text.find((f) => f.kind === "parameterName");
+        const text = f.text.find((f) => f.kind === "text");
+        return [name.text, text.text.replace("- ", "")];
+      })
   );
 
   const parameters = signature.parameters.map<DocEntry>((param) => ({
