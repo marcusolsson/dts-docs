@@ -87,6 +87,12 @@ function main(args: string[]): void {
 
   const res: string[] = [];
 
+  res.push("---");
+  res.push(`title: dts-docs/api-reference`);
+  res.push(`group: dts-docs`)
+  res.push("---");
+  res.push("");
+
   res.push("# API reference");
   res.push("");
 

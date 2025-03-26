@@ -5,6 +5,12 @@ import { escapeHTML, serializeSymbol } from "./utils";
 export const printEnum = (e: EnumDocEntry): string => {
   const res: string[] = [];
 
+  res.push("---");
+  res.push(`title: dts-docs/api-reference/enum/${e.name}`);
+  res.push(`group: dts-docs`)
+  res.push("---");
+  res.push("");
+
   res.push(`# ${e.name}`);
   res.push("");
   res.push("```ts");

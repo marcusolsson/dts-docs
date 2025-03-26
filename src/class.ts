@@ -5,6 +5,13 @@ import { escapeHTML, serializeSignature, serializeSymbol } from "./utils";
 export const printClass = (c: ClassDocEntry): string => {
   const res: string[] = [];
 
+  res.push("---");
+  res.push(`title: dts-docs/api-reference/class/${c.name}`);
+  res.push(`group: dts-docs`)
+  res.push("---");
+  res.push("");
+
+
   res.push(`# ${c.name}`);
   res.push("");
   if (c.heritage.extends && c.heritage.extends.length > 0) {

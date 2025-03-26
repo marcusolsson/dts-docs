@@ -5,6 +5,13 @@ import { escapeHTML, serializeSymbol } from "./utils";
 export const printInterface = (i: InterfaceDocEntry): string => {
   const res: string[] = [];
 
+  res.push("---");
+  res.push(`title: dts-docs/api-reference/interface/${i.name}`);
+  res.push(`group: dts-docs`)
+  res.push("---");
+  res.push("");
+
+
   res.push(`# ${i.name}`);
   res.push("");
 
