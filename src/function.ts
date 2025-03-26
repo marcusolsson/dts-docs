@@ -45,6 +45,13 @@ export const parseFunction = (
 export const printFunction = (f: FunctionDocEntry): string => {
   const res: string[] = [];
 
+  res.push("---");
+  res.push(`title: dts-docs/api-reference/function/${f.name}`);
+  res.push(`group: dts-docs`)
+  res.push("---");
+  res.push("");
+
+
   res.push("# " + f.name);
   res.push("");
   res.push("```ts");
