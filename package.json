@@ -1,29 +1,25 @@
 {
-  "name": "obsidian-api",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "dts-docs",
+  "version": "0.1.0",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "webpack-cli",
-    "generate": "npm run build && node dist/index.js",
+    "build": "esbuild src/dts-docs.ts --bundle --platform=node --outfile=dist/index.js --format=cjs --banner:js='#!/usr/bin/env node'",
+    "run": "node dist/index.js",
     "test": "jest"
   },
-  "devDependencies": {
-    "@types/codemirror": "5.60.5",
-    "@types/jest": "27.5.2",
-    "@types/node": "16.11.11",
-    "jest": "29.5.0",
-    "prettier": "2.8.7",
-    "ts-jest": "29.0.5",
-    "ts-loader": "9.5.1",
-    "ts-node": "10.4.0",
-    "typescript": "4.9.5",
-    "webpack": "5.90.3",
-    "webpack-cli": "5.1.4",
-    "webpack-node-externals": "^3.0.0"
+  "bin": {
+    "dts-docs": "./dist/index.js"
   },
-  "dependencies": {
-    "codemirror": "5.63.1",
-    "moment": "2.29.1"
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.14",
+    "esbuild": "^0.25.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.5.3",
+    "ts-jest": "^29.3.0",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   }
 }
