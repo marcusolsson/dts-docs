@@ -1,24 +1,6 @@
 import * as ts from "typescript";
 import { DocEntry } from "./types";
-import { escapeHTML, serializeSymbol } from "./utils";
-
-export const printEnum = (e: DocEntry): string => {
-  const res: string[] = [];
-
-  res.push(`# ${e.name}`);
-  res.push("");
-  res.push("```ts");
-  res.push(e.raw);
-  res.push("```");
-  res.push("");
-
-  if (e.documentation) {
-    res.push(escapeHTML(e.documentation));
-    res.push("");
-  }
-
-  return res.join("\n");
-};
+import { serializeSymbol } from "./utils";
 
 export const parseEnum = (
   node: ts.EnumDeclaration,
