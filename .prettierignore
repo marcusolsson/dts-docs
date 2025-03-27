@@ -1,0 +1,4 @@
+dist/
+docs/
+testdata/
+pnpm-lock.yaml
