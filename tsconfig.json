@@ -4,11 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "dist"
   },
-  "include": [
-    "src/**/*",
-    "test/**/*",
-    "testdata",
-  ]
+  "include": ["src/**/*", "test/**/*", "testdata"]
 }

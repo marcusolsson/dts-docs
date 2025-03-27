@@ -2,8 +2,8 @@
 
 A command-line tool for generating Markdown documentation for a `.d.ts` file.
 
-> [!IMPORTANT] 
-This is **NOT** fit for production use. Use at your own risk.
+> [!IMPORTANT]
+> This is **NOT** fit for production use. Use at your own risk.
 
 ## Usage
 
