@@ -1,10 +1,11 @@
 {
-  "name": "@marcusolsson/dts-docs",
+  "name": "dts-docs",
   "version": "0.1.0",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "esbuild src/dts-docs.ts --bundle --platform=node --outfile=dist/index.js --format=cjs --banner:js='#!/usr/bin/env node'",
+    "postbuild": "chmod +x dist/index.js",
     "run": "node dist/index.js",
     "test": "jest"
   },
