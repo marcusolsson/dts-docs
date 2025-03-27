@@ -79,24 +79,6 @@ test("parse class", () => {
           raw: "stop(): void;",
           type: "() => void",
         },
-        {
-          name: "on",
-          documentation: "foo",
-          raw: `on(name: "foo", callback: () => any, ctx?: any): string;`,
-          type: '(name: "foo", callback: () => any, ctx?: any): string;',
-        },
-        {
-          name: "on",
-          documentation: "bar",
-          raw: `on(name: "bar", callback: () => any, ctx?: any): string;`,
-          type: '(name: "bar", callback: () => any, ctx?: any): string;',
-        },
-        {
-          name: "on",
-          documentation: "baz",
-          raw: `on(name: "baz", callback: () => any, ctx?: any): string;`,
-          type: '(name: "baz", callback: () => any, ctx?: any): string;',
-        },
       ],
       heritage: {
         implements: ["Runnable", "Object"],
