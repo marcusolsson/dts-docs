@@ -66,10 +66,11 @@ export const parseInterface = (
   ts.forEachChild(node, (node) => {
     if (ts.isPropertySignature(node)) {
       const propertySymbol = checker.getSymbolAtLocation(node.name);
+      const serializedSymbol = serializeSymbol(checker, propertySymbol);
 
       properties.push({
         raw: node.getText(),
-        ...serializeSymbol(checker, propertySymbol),
+        ...serializedSymbol,
       });
     }
   });
