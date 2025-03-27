@@ -1,8 +1,8 @@
 import * as ts from "typescript";
-import { EnumDocEntry, TypeDocEntry } from "./types";
+import { DocEntry } from "./types";
 import { escapeHTML, serializeSymbol } from "./utils";
 
-export const printType = (e: TypeDocEntry): string => {
+export const printType = (e: DocEntry): string => {
   const res: string[] = [];
 
   res.push(`# ${e.name}`);
@@ -26,7 +26,7 @@ export const parseType = (
   checker: ts.TypeChecker,
   printer: ts.Printer,
   sourceFile: ts.SourceFile
-): EnumDocEntry => {
+): DocEntry => {
   const symbol = checker.getSymbolAtLocation(node.name);
 
   if (!symbol) {

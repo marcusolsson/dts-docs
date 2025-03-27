@@ -5,13 +5,17 @@ export const serializeSymbol = (
   checker: ts.TypeChecker,
   symbol: ts.Symbol
 ): DocEntry => {
+  if (!symbol.valueDeclaration) {
+    throw new Error("Symbol does not have a value declaration");
+  }
+
   return {
     name: symbol.getName(),
     documentation: ts.displayPartsToString(
       symbol.getDocumentationComment(checker)
     ),
     type: checker.typeToString(
-      checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!)
+      checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration)
     ),
   };
 };

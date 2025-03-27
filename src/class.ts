@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { ClassDocEntry, DocEntry } from "./types";
+import { ClassDocEntry, DocEntry, Heritage } from "./types";
 import { escapeHTML, serializeSignature, serializeSymbol } from "./utils";
 
 export const printClass = (c: ClassDocEntry): string => {
@@ -87,7 +87,8 @@ export const parseClass = (
 ): ClassDocEntry => {
   const classSymbol = checker.getSymbolAtLocation(node.name);
 
-  const heritage: any = {};
+  const heritage: Heritage = {};
+
   ts.forEachChild(node, (node) => {
     if (ts.isHeritageClause(node)) {
       if (node.getText().startsWith("implements")) {
@@ -106,10 +107,13 @@ export const parseClass = (
     }
   });
 
-  // Get the construct signatures
-  let constructorType = checker.getTypeOfSymbolAtLocation(
+  if (!classSymbol.valueDeclaration) {
+    throw new Error("Class symbol does not have a value declaration");
+  }
+
+  const constructorType = checker.getTypeOfSymbolAtLocation(
     classSymbol,
-    classSymbol.valueDeclaration!
+    classSymbol.valueDeclaration
   );
 
   const constructorSymbols = constructorType

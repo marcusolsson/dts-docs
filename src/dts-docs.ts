@@ -7,10 +7,9 @@ import { parseInterface, printInterface } from "./interface";
 import { parseType, printType } from "./type";
 import {
   ClassDocEntry,
-  EnumDocEntry,
+  DocEntry,
   FunctionDocEntry,
   InterfaceDocEntry,
-  TypeDocEntry,
 } from "./types";
 import * as path from "path";
 
@@ -32,8 +31,8 @@ function parseFile(file: string) {
   const functions: FunctionDocEntry[] = [];
   const interfaces: InterfaceDocEntry[] = [];
   const classes: ClassDocEntry[] = [];
-  const enums: EnumDocEntry[] = [];
-  const types: TypeDocEntry[] = [];
+  const enums: DocEntry[] = [];
+  const types: DocEntry[] = [];
 
   if (!sourceFile) {
     return {

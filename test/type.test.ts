@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import * as ts from "typescript";
 import { parseType, printType } from "../src/type";
-import { EnumDocEntry } from "../src/types";
+import { DocEntry } from "../src/types";
 
 test("parse type", () => {
   const file = "./testdata/type.d.ts";
@@ -13,7 +13,7 @@ test("parse type", () => {
     removeComments: true,
   });
 
-  const enums: EnumDocEntry[] = [];
+  const enums: DocEntry[] = [];
 
   if (sourceFile) {
     ts.forEachChild(sourceFile, (node) => {
