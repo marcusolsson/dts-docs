@@ -21,7 +21,14 @@ export const parseFunction = (
       .map((f) => {
         const name = f.text.find((f) => f.kind === "parameterName");
         const text = f.text.find((f) => f.kind === "text");
-        return [name.text, text.text.replace("- ", "")];
+
+        if (name) {
+          return [name.text, text.text.replace("- ", "")];
+        }
+
+        // If the parameter doesn't have have a description, the kind will be
+        // `text` instead of `parameterName`.
+        return [text.text, ""];
       })
   );
 
