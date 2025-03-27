@@ -8,5 +8,5 @@ This is **NOT** fit for production use. Use at your own risk.
 ## Usage
 
 ```bash
-npx dts-docs ./definition.d.ts ./docs
+npx dts-docs@latest ./definition.d.ts ./docs
 ```
