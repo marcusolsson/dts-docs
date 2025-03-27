@@ -30,14 +30,3 @@ export function serializeSignature(
     ),
   };
 }
-
-export const escapeHTML = (str: string): string => {
-  return str
-    .replace("|", "&vert;")
-    .replace("<", "&lt;")
-    .replace("<", "&lt;")
-    .replace("<", "&lt;")
-    .replace(">", "&gt;")
-    .replace(">", "&gt;")
-    .replace(">", "&gt;");
-};

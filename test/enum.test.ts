@@ -1,7 +1,8 @@
 import { readFileSync } from "fs";
 import * as ts from "typescript";
-import { parseEnum, printEnum } from "../src/enum";
-import { DocEntry } from "../src/types";
+import { DocEntry } from "../src/parser/types";
+import { parseEnum } from "../src/parser/enum";
+import { printEnum } from "../src/printer/enum";
 
 test("parse enum", () => {
   const file = "./testdata/enum.d.ts";
