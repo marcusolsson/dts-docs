@@ -10,9 +10,11 @@ export const serializeSymbol = (
     documentation: ts.displayPartsToString(
       symbol.getDocumentationComment(checker)
     ),
-    type: checker.typeToString(
-      checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!)
-    ),
+    type: symbol.valueDeclaration
+      ? checker.typeToString(
+          checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration)
+        )
+      : "any",
   };
 };
 

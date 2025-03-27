@@ -32,13 +32,19 @@ export const parseFunction = (
       })
   );
 
-  const parameters = signature.parameters.map<DocEntry>((param) => ({
-    name: param.getName(),
-    type: checker.typeToString(
-      checker.getTypeOfSymbolAtLocation(param, param.valueDeclaration!)
-    ),
-    documentation: docTags[param.getName()] ?? "",
-  }));
+  const parameters = signature.parameters.map<DocEntry>((param) => {
+    if (!param.valueDeclaration) {
+      throw new Error("Parameter does not have a value declaration");
+    }
+
+    return {
+      name: param.getName(),
+      type: checker.typeToString(
+        checker.getTypeOfSymbolAtLocation(param, param.valueDeclaration)
+      ),
+      documentation: docTags[param.getName()] ?? "",
+    };
+  });
 
   return {
     name: symbol.getName(),
