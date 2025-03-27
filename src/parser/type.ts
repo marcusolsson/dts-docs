@@ -1,25 +1,6 @@
 import * as ts from "typescript";
-import { EnumDocEntry, TypeDocEntry } from "./types";
-import { escapeHTML, serializeSymbol } from "./utils";
-
-export const printType = (e: TypeDocEntry): string => {
-  const res: string[] = [];
-
-  res.push(`# ${e.name}`);
-  res.push("");
-
-  if (e.raw) {
-    res.push("```ts");
-    res.push(e.raw);
-    res.push("```");
-    res.push("");
-  }
-
-  res.push(escapeHTML(e.documentation));
-  res.push("");
-
-  return res.join("\n");
-};
+import { EnumDocEntry } from "./types";
+import { serializeSymbol } from "./utils";
 
 export const parseType = (
   node: ts.TypeAliasDeclaration,

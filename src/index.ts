@@ -1,79 +1,16 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import * as ts from "typescript";
-import { parseClass, printClass } from "./class";
-import { parseEnum, printEnum } from "./enum";
-import { parseFunction, printFunction } from "./function";
-import { parseInterface, printInterface } from "./interface";
-import { parseType, printType } from "./type";
-import {
-  ClassDocEntry,
-  EnumDocEntry,
-  FunctionDocEntry,
-  InterfaceDocEntry,
-  TypeDocEntry,
-} from "./types";
 import * as path from "path";
+import { parseFile } from "./parser";
+import { printFunction } from "./printer/function";
+import { printClass } from "./printer/class";
+import { printEnum } from "./printer/enum";
+import { printType } from "./printer/type";
+import { printInterface } from "./printer/interface";
 
 function ensureDir(dirPath: string) {
   if (!existsSync(dirPath)) {
     mkdirSync(dirPath);
   }
-}
-
-function parseFile(file: string) {
-  const program = ts.createProgram([file], {});
-  const checker = program.getTypeChecker();
-  const printer = ts.createPrinter({
-    newLine: ts.NewLineKind.LineFeed,
-    removeComments: true,
-  });
-  const sourceFile = program.getSourceFile(file);
-
-  const functions: FunctionDocEntry[] = [];
-  const interfaces: InterfaceDocEntry[] = [];
-  const classes: ClassDocEntry[] = [];
-  const enums: EnumDocEntry[] = [];
-  const types: TypeDocEntry[] = [];
-
-  if (!sourceFile) {
-    return {
-      functions,
-      interfaces,
-      classes,
-      enums,
-      types,
-    };
-  }
-
-  const parseDeclarations = (node: ts.Node) => {
-    ts.forEachChild(node, (n) => {
-      if (ts.isFunctionDeclaration(n)) {
-        functions.push(parseFunction(n, checker, printer, sourceFile));
-      } else if (ts.isInterfaceDeclaration(n)) {
-        interfaces.push(parseInterface(n, checker, printer, sourceFile));
-      } else if (ts.isClassDeclaration(n)) {
-        classes.push(parseClass(n, checker, printer, sourceFile));
-      } else if (ts.isEnumDeclaration(n)) {
-        enums.push(parseEnum(n, checker, printer, sourceFile));
-      } else if (ts.isTypeAliasDeclaration(n)) {
-        types.push(parseType(n, checker, printer, sourceFile));
-      } else if (ts.isModuleDeclaration(n)) {
-        if (n.body) {
-          parseDeclarations(n.body);
-        }
-      }
-    });
-  };
-
-  parseDeclarations(sourceFile);
-
-  return {
-    functions,
-    interfaces,
-    classes,
-    enums,
-    types,
-  };
 }
 
 function main(args: string[]): void {
