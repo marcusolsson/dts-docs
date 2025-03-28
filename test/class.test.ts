@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import * as ts from "typescript";
 import { ClassDocEntry } from "../src/parser/types";
 import { parseClass } from "../src/parser/class";
-import { printClass } from "../src/printer/class";
+import { ClassPrinter } from "../src/printer/class";
 
 test("parse class", () => {
   const file = "./testdata/class.d.ts";
@@ -162,5 +162,7 @@ test("print class", () => {
 
   const want = readFileSync("./testdata/class.d.md", "utf-8");
 
-  expect(got.map(printClass).join("\n")).toEqual(want);
+  const printer = new ClassPrinter();
+
+  expect(got.map(printer.print).join("\n")).toEqual(want);
 });

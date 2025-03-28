@@ -1,104 +1,89 @@
 import { ParsedFile } from "../parser";
 import { writeFileSync } from "fs";
-import { printClass } from "./class";
-import { printEnum } from "./enum";
-import { printFunction } from "./function";
-import { printInterface } from "./interface";
-import { printType } from "./type";
+import { ClassPrinter } from "./class";
+import { EnumPrinter } from "./enum";
+import { FunctionPrinter } from "./function";
+import { InterfacePrinter } from "./interface";
+import { TypePrinter } from "./type";
 import { ensureDir } from "./utils";
 import * as path from "path";
+import { DocEntry } from "../parser/types";
+import { TocPrinter } from "./toc";
 
-export function writeDocs(inputFile: ParsedFile, outputDir: string) {
+/**
+ * Used to define a printer strategy for a doc entry.
+ */
+export interface Printer<T extends DocEntry> {
+  print(entry: T): string;
+}
+
+/**
+ * Writes the parsed doc entries to an directory.
+ *
+ * @param input - The parsed file containing the definitions
+ * @param outputDir - The root directory for the generated docs
+ */
+export function writeDocs(input: ParsedFile, outputDir: string) {
+  writeTableOfContents(outputDir, input, new TocPrinter());
+
+  writeEntriesToFile(outputDir, "classes", input.classes, new ClassPrinter());
+  writeEntriesToFile(outputDir, "enums", input.enums, new EnumPrinter());
+  writeEntriesToFile(
+    outputDir,
+    "functions",
+    input.functions,
+    new FunctionPrinter()
+  );
+  writeEntriesToFile(
+    outputDir,
+    "interfaces",
+    input.interfaces,
+    new InterfacePrinter()
+  );
+  writeEntriesToFile(outputDir, "types", input.types, new TypePrinter());
+}
+
+/**
+ * Writes an index.md with the table of contents for all the doc entries.
+ *
+ * @param outputDir - The root directory for the generated docs
+ * @param inputFile - The parsed file containing the definitions
+ * @param printer - The printer to use for converting the definitions to text
+ */
+function writeTableOfContents(
+  outputDir: string,
+  inputFile: ParsedFile,
+  printer: TocPrinter
+) {
   if (outputDir) {
     ensureDir(path.join(outputDir));
   }
 
-  const { classes, enums, functions, interfaces, types } = inputFile;
+  writeFileSync(path.join(outputDir, "index.md"), printer.print(inputFile));
+}
 
-  const toc: string[] = [];
-
-  toc.push("# API reference");
-  toc.push("");
-
-  toc.push("## Classes");
-  toc.push("");
-
-  if (classes.length) {
-    ensureDir(path.join(outputDir, "classes"));
+/**
+ * Writes a collection of doc entries to a subfolder in the output directory.
+ *
+ * @param outputDir - The root directory for the generated docs
+ * @param sectionDir - The subdirectory for the specific doc entries
+ * @param entries - The doc entries to write
+ * @param printer - The printer to use for converting doc entries to text
+ */
+function writeEntriesToFile<T extends DocEntry>(
+  outputDir: string,
+  sectionDir: string,
+  entries: T[],
+  printer: Printer<T>
+) {
+  if (entries.length) {
+    ensureDir(path.join(outputDir, sectionDir));
   }
 
-  classes.forEach((c) => {
+  entries.forEach((entry) => {
     writeFileSync(
-      path.join(outputDir, "classes", c.name + ".md"),
-      printClass(c)
+      path.join(outputDir, sectionDir, entry.name + ".md"),
+      printer.print(entry)
     );
-
-    toc.push(`- [${c.name}](classes/${c.name}.md)`);
   });
-
-  toc.push("");
-  toc.push("## Enums");
-  toc.push("");
-
-  if (enums.length) {
-    ensureDir(path.join(outputDir, "enums"));
-  }
-
-  enums.forEach((e) => {
-    writeFileSync(path.join(outputDir, "enums", e.name + ".md"), printEnum(e));
-
-    toc.push(`- [${e.name}](enums/${e.name}.md)`);
-  });
-
-  toc.push("");
-  toc.push("## Functions");
-  toc.push("");
-
-  if (functions.length) {
-    ensureDir(path.join(outputDir, "functions"));
-  }
-
-  functions.forEach((f) => {
-    writeFileSync(
-      path.join(outputDir, "functions", f.name + ".md"),
-      printFunction(f)
-    );
-
-    toc.push(`- [${f.name}](functions/${f.name}.md)`);
-  });
-
-  toc.push("");
-  toc.push("## Interfaces");
-  toc.push("");
-
-  if (interfaces.length) {
-    ensureDir(path.join(outputDir, "interfaces"));
-  }
-
-  interfaces.forEach((i) => {
-    writeFileSync(
-      path.join(outputDir, "interfaces", i.name + ".md"),
-      printInterface(i)
-    );
-
-    toc.push(`- [${i.name}](interfaces/${i.name}.md)`);
-  });
-
-  toc.push("");
-  toc.push("## Types");
-  toc.push("");
-
-  if (types.length) {
-    ensureDir(path.join(outputDir, "types"));
-  }
-
-  types.forEach((t) => {
-    writeFileSync(path.join(outputDir, "types", t.name + ".md"), printType(t));
-
-    toc.push(`- [${t.name}](types/${t.name}.md)`);
-  });
-
-  toc.push("");
-
-  writeFileSync(path.join(outputDir, "index.md"), toc.join("\n"));
 }

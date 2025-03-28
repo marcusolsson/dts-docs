@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import * as ts from "typescript";
 import { DocEntry } from "../src/parser/types";
 import { parseEnum } from "../src/parser/enum";
-import { printEnum } from "../src/printer/enum";
+import { EnumPrinter } from "../src/printer/enum";
 
 test("parse enum", () => {
   const file = "./testdata/enum.d.ts";
@@ -61,5 +61,7 @@ test("print enum", () => {
 
   const want = readFileSync("./testdata/enum.d.md", "utf-8");
 
-  expect(got.map(printEnum).join("\n")).toEqual(want);
+  const printer = new EnumPrinter();
+
+  expect(got.map(printer.print).join("\n")).toEqual(want);
 });

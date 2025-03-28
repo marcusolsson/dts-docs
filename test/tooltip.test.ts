@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import * as ts from "typescript";
 import { FunctionDocEntry } from "../src/parser/types";
 import { parseFunction } from "../src/parser/function";
-import { printFunction } from "../src/printer/function";
+import { FunctionPrinter } from "../src/printer/function";
 
 test("parse tooltip", () => {
   const file = "./testdata/tooltip.d.ts";
@@ -26,5 +26,7 @@ test("parse tooltip", () => {
 
   const want = readFileSync("./testdata/tooltip.d.md", "utf-8");
 
-  expect(functions.map(printFunction).join("\n")).toEqual(want);
+  const fnPrinter = new FunctionPrinter();
+
+  expect(functions.map(fnPrinter.print).join("\n")).toEqual(want);
 });
