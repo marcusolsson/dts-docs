@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import * as ts from "typescript";
 import { DocEntry } from "../src/parser/types";
 import { parseType } from "../src/parser/type";
-import { printType } from "../src/printer/type";
+import { TypePrinter } from "../src/printer/type";
 
 test("parse type", () => {
   const file = "./testdata/type.d.ts";
@@ -49,5 +49,7 @@ test("print type", () => {
 
   const want = readFileSync("./testdata/type.d.md", "utf-8");
 
-  expect(got.map(printType).join("\n")).toEqual(want);
+  const printer = new TypePrinter();
+
+  expect(got.map(printer.print).join("\n")).toEqual(want);
 });

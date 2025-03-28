@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import * as ts from "typescript";
 import { InterfaceDocEntry } from "../src/parser/types";
 import { parseInterface } from "../src/parser/interface";
-import { printInterface } from "../src/printer/interface";
+import { InterfacePrinter } from "../src/printer/interface";
 
 test("parse interface", () => {
   const file = "./testdata/interface.d.ts";
@@ -88,5 +88,7 @@ test("print interface", () => {
 
   const want = readFileSync("./testdata/interface.d.md", "utf-8");
 
-  expect(got.map(printInterface).join("\n")).toEqual(want);
+  const printer = new InterfacePrinter();
+
+  expect(got.map(printer.print).join("\n")).toEqual(want);
 });
